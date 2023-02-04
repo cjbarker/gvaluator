@@ -33,19 +33,19 @@ pytest
 
 Linting
 ```
-flake8 pp.py
+flake8 gvaluator.py
 ```
 
 Isort
 For import module sorting
 ```
-isort pp.py
+isort gvaluator.py
 ```
 
 Black
 Code formatting
 ```
-black pp.py
+black gvaluator.py
 ```
 
 Git Hook
