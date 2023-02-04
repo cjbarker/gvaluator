@@ -1,0 +1,61 @@
+default_language_version:
+  python: python3.7
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: check-docstring-first
+    - id: check-merge-conflict
+    - id: mixed-line-ending
+      args: [--fix=lf]
+
+  - repo: local
+    hooks:
+      - id: pyupgrade
+        name: pyupgrade
+        stages: [commit]
+        language: system
+        entry: pyupgrade gvaluator.py
+        types: [python]
+
+      - id: isort
+        name: isort
+        stages: [commit]
+        language: system
+        entry: isort gvaluator.py
+        types: [python]
+
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: black gvaluator.py
+        types: [python]
+
+      - id: flake8
+        name: flake8
+        stages: [commit]
+        language: system
+        entry: flake8 gvaluator.py
+        types: [python]
+        exclude: setup.cfg
+
+      - id: bandit-vulnerability-check
+        name: bandit
+        stages: [commit]
+        language: system
+        entry: bandit gvaluator.py
+        types: [python]
+        exclude: /test
+
+      - id: pytest
+        name: pytest
+        pass_filenames: false
+        stages: [commit]
+        language: system
+        entry: pytest --capture=tee-sys
+        types: [python]
