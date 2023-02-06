@@ -21,7 +21,7 @@ SCOPES = [
 
 class Record:
     def __init__(self, stock_symbol):
-        self.stock_symbol = stock_symbol
+        self.stock_symbol = stock_symbol.upper()
         self.five_yr_pps = 0  # five year price per share average
         self.net_income = 0
         self.pref_div = 0  # preferred dividends
@@ -114,9 +114,20 @@ def format(worksheet):
     pass
 
 
-def append(worksheet, rec):
-    # get last row, update calculations then write
-    row = len(worksheet.col_values(1)) + 1
+def get_row(worksheet, rec):
+    # find row number of existing record or append to last row
+    cell = worksheet.find(rec.stock_symbol)
+    try:
+        row = cell.row
+    except AttributeError:
+        # no cell found append to sheet last row
+        row = len(worksheet.col_values(1)) + 1
+    return row
+
+
+def insert(worksheet, rec):
+    # update calculation record, update/create record in spreadsheet
+    row = get_row(worksheet, rec)
     rec.calc_all(row)
     worksheet.update_cell(row, 1, rec.stock_symbol)
     worksheet.update_cell(row, 2, rec.five_yr_pps)
@@ -161,7 +172,7 @@ def main():
     rec.pref_div = 0
     rec.outstanding = 443155
     rec.pps = 360.04
-    append(ws, rec)
+    insert(ws, rec)
 
 
 if __name__ == "__main__":
